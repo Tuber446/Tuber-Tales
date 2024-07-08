@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Carousel with Navbar</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: black;
+            color: white;
+        }
+        .navbar .logo {
+            font-size: 1.5rem;
+        }
+        .navbar .menu {
+            display: none;
+        }
+        .navbar .menu-button {
+            font-size: 2rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            background-color: #333;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #575757;
+        }
+        .show {
+            display: block;
+        }
+        .carousel-container {
+            padding: 0 20px;
+        }
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            border-radius: 15px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .carousel-slide img {
+            width: 100%;
+            display: block;
+            border-radius: 15px;
+        }
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        .carousel-button {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: white;
+        }
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .carousel-indicator {
+            background: #ccc;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .carousel-indicator.active {
+            background: #333;
+        }
+        .body-title {
+            font-family: Arial, sans-serif;
+        }
+
+        .nav-below-title {
+          display: flex;
+           align-items: center;
+          font-size: 36px; /* Adjust as needed */
+          color: #0052cc; /* Blue color similar to the text */
+        }
+
+        .top-title-icon {
+             color: #f56b00; /* Orange color for the icon */
+             font-size: 36px; /* Adjust to match text size */
+             transform: rotate(180deg); /* Rotate to mimic the design */
+             margin-right: 10px; /* Space between icon and text */
+        }
+
+        .top-title-text {
+             font-weight: bold;
+}
+.top-stories, .recent-stories {
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.top-stories h2, .recent-stories h2 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 20px;
+    color: #0052cc;
+}
+
+.stories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.stories-grid a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit color from the parent element */
+}
+
+.stories-grid article {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 150px; <!-- Article size Pc - 300px & Mobile 150px -->
+}
+
+.stories-grid article img {
+    width: 150px;
+    height: auto;
+}
+
+.stories-grid article h3 {
+    margin: 10px;
+    font-size: 15px;
+}
+
+.stories-grid article p {
+    margin: 10px;
+    color: gray;
+    font-size: 10px;
+}
+.head-size{
+    text-align:center;
+}
+
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.footer-main ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer-main ul li {
+    margin-bottom: 10px;
+}
+
+.footer-main ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-bottom {
+    padding-top: 20px;
+}
+
+.footer-bottom ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-bottom ul li {
+    margin: 0 10px;
+}
+
+.footer-bottom ul li a {
+    color: white;
+    text-decoration: none;
+}
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo"><img src="logo.png" width="30px"></div>
+        <button class="menu-button" onclick="toggleMenu()">&#9776;</button>
+        <div class="dropdown-content" id="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+    </div><br>
+<section class="body-title">
+    <div class="nav-below-title">&nbsp;&nbsp;
+        <span class="top-title-icon">&#10094;</span> <!-- This can be replaced with an actual icon if needed -->
+        <span class="top-title-text">TUBER TALES</span>
+    </div>
+  </section>
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-track">
+                <div class="carousel-slide"><img src="recent1.jpg" alt="Slide 1"></div>
+                <div class="carousel-slide"><img src="recent2.jpg" alt="Slide 2"></div>
+                <div class="carousel-slide"><img src="recent3.jpg" alt="Slide 3"></div>
+            </div>
+            <div class="carousel-nav">
+                <button class="carousel-button prev">&lt;</button>
+                <button class="carousel-button next">&gt;</button>
+            </div>
+        </div>
+        <div class="carousel-indicators">
+            <div class="carousel-indicator active" data-slide="0"></div>
+            <div class="carousel-indicator" data-slide="1"></div>
+            <div class="carousel-indicator" data-slide="2"></div>
+        </div>
+    </div>
+<h2 class="head-size">Top Stories</h2><br>
+        <div class="stories-grid">
+            <a href="https://tuber446.github.io/tuber.github.io/index.html" >
+            <article>
+                <img src="recent1.jpg" alt="Story 1">
+                <h3>Places to visit in Dubai</h3>
+                <p>by Ayush</p>
+            </article>
+            </a>
+            <article>
+                <img src="recent2.jpg" alt="Story 2">
+                <h3>Nawaz quizzed by Model Town JIT in jail for two hours</h3>
+                <p>by SHARIQ BABAR</p>
+            </article>
+            <article>
+                <img src="recent3.jpg" alt="Story 3">
+                <h3>Zardari, Bilawal grilled by NAB in Islamabad</h3>
+                <p>by SHARIQ BABAR</p>
+            </article>
+            <article>
+                <img src="recent1.jpg" alt="Story 4">
+                <h3>Malaysian PM offers tax holidays to foreign investors</h3>
+                <p>by SHARIQ BABAR</p>
+            </article>
+            <a href="https://tuber446.github.io/tuber.github.io/index.html" >
+            <article>
+                <img src="recent1.jpg" alt="Story 1">
+                <h3>Places to visit in DUbai</h3>
+                <p>by Ayush</p>
+            </article>
+            </a>
+            <a href="https://tuber446.github.io/tuber.github.io/index.html" >
+            <article>
+                <img src="recent1.jpg" alt="Story 1">
+                <h3>Places to visit in DUbai</h3>
+                <p>by Ayush</p>
+            </article>
+            </a>
+            <a href="https://tuber446.github.io/tuber.github.io/index.html" >
+            <article>
+                <img src="recent1.jpg" alt="Story 1">
+                <h3>Places to visit in DUbai</h3>
+                <p>by Ayush</p>
+            </article>
+            </a>
+            <a href="https://tuber446.github.io/tuber.github.io/index.html" >
+            <article>
+                <img src="recent1.jpg" alt="Story 1">
+                <h3>Places to visit in DUbai</h3>
+                <p>by Ayush</p>
+            </article>
+            </a>
+            <a href="https://tuber446.github.io/tuber.github.io/index.html" >
+            <article>
+                <img src="recent1.jpg" alt="Story 1">
+                <h3>Places to visit in DUbai</h3>
+                <p>by Ayush</p>
+            </article>
+            </a>
+        </div>
+<br><br>
+    </section>
+
+    <section class="recent-stories">
+  <h2 class="head-size">Recent Stories</h2><br>
+        <div class="stories-grid">
+            <article>
+                <img src="recent1.jpg" alt="Recent Story 1">
+                <h3>Shutdown in Indian-occupied Kashmir</h3>
+                <p>by SHARIQ BABAR</p>
+            </article>
+            <article>
+                <img src="recent2.jpg" alt="Recent Story 2">
+                <h3>Man sacked, deported from UAE</h3>
+                <p>by SHARIQ BABAR</p>
+            </article>
+            <article>
+                <img src="recent3.jpg" alt="Recent Story 3">
+                <h3>Fugitive billionaire jeweller Nirav Modi arrested</h3>
+                <p>by SHARIQ BABAR</p>
+            </article>
+        </div>
+    </section>
+
+    <script>
+        const track = document.querySelector('.carousel-track');
+        const slides = Array.from(track.children);
+        const nextButton = document.querySelector('.carousel-button.next');
+        const prevButton = document.querySelector('.carousel-button.prev');
+        const indicators = Array.from(document.querySelectorAll('.carousel-indicator'));
+
+        const setSlidePosition = (slide, index) => {
+            slide.style.left = 100 * index + '%';
+        };
+        slides.forEach(setSlidePosition);
+
+        const moveToSlide = (track, currentSlide, targetSlide) => {
+            track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
+            currentSlide.classList.remove('current-slide');
+            targetSlide.classList.add('current-slide');
+        };
+
+        nextButton.addEventListener('click', e => {
+            const currentSlide = track.querySelector('.current-slide');
+            const nextSlide = currentSlide.nextElementSibling;
+            const currentIndicator = document.querySelector('.carousel-indicator.active');
+            const nextIndicator = currentIndicator.nextElementSibling;
+
+            if (nextSlide) {
+                moveToSlide(track, currentSlide, nextSlide);
+                currentIndicator.classList.remove('active');
+                nextIndicator.classList.add('active');
+            }
+        });
+
+        prevButton.addEventListener('click', e => {
+            const currentSlide = track.querySelector('.current-slide');
+            const prevSlide = currentSlide.previousElementSibling;
+            const currentIndicator = document.querySelector('.carousel-indicator.active');
+            const prevIndicator = currentIndicator.previousElementSibling;
+
+            if (prevSlide) {
+                moveToSlide(track, currentSlide, prevSlide);
+                currentIndicator.classList.remove('active');
+                prevIndicator.classList.add('active');
+            }
+        });
+
+        indicators.forEach(indicator => {
+            indicator.addEventListener('click', e => {
+                const targetIndex = indicators.indexOf(e.target);
+                const currentSlide = track.querySelector('.current-slide');
+                const targetSlide = slides[targetIndex];
+                const currentIndicator = document.querySelector('.carousel-indicator.active');
+
+                moveToSlide(track, currentSlide, targetSlide);
+                currentIndicator.classList.remove('active');
+                indicator.classList.add('active');
+            });
+        });
+
+        slides[0].classList.add('current-slide');
+
+        function toggleMenu() {
+            document.getElementById('dropdown-content').classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-button')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        // Automatic image change every 3 seconds
+        setInterval(() => {
+            const currentSlide = track.querySelector('.current-slide');
+            const nextSlide = currentSlide.nextElementSibling || slides[0];
+            const currentIndicator = document.querySelector('.carousel-indicator.active');
+            const nextIndicator = currentIndicator.nextElementSibling || indicators[0];
+
+            moveToSlide(track, currentSlide, nextSlide);
+            currentIndicator.classList.remove('active');
+            nextIndicator.classList.add('active');
+        }, 3000);
+    </script>
+
+</body>
+<!-- Footer -->
+<footer>
+        <div class="footer-main">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Latest</a></li>
+                <li><a href="#">All Stories</a></li>
+            </ul>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Become a Source</a></li>
+                <li><a href="#">Join Us</a></li>
+                <li><a href="#">Donate</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#">Google+</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 TUBER TALES. All rights reserved.</p>
+            <ul>
+                <li><a href="#">Terms of Use</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Sitemap</a></li>
+            </ul>
+        </div>
+    </footer>
+</html>
+
